@@ -3,3 +3,7 @@
 ################################################################################
 
 /.vs/DownloadNuget/v15
+/ConsoleApp1/bin/Debug
+/ConsoleApp1/obj/Debug
+/DownloadNuget/bin/Debug/netstandard2.0
+/DownloadNuget/obj
