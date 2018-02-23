@@ -74,6 +74,11 @@ namespace DownloadNuget
         public string PackageID = "";
         public SemanticVersion version;
         private IPackageRepository repo = PackageRepositoryFactory.Default.CreateRepository("https://packages.nuget.org/api/v2");
+        /// <summary>
+        /// Constructor for setting up an empty project
+        /// </summary>
+        public DLNuget()
+        { }
 
         /// <summary>
         /// This constructor sets up the package to be downloaded and placed on the hard drive for use
@@ -90,6 +95,7 @@ namespace DownloadNuget
             SetDirectory(dir);
             SetVersion(vers);
         }
+              
         /// <summary>
         /// This method initiates the download of the package.
         /// It also will place the dlls and the files in the package into the two lists: AllFiles and DLLs.
@@ -109,12 +115,17 @@ namespace DownloadNuget
         {
             return await Task.Factory.StartNew(() => RetrievePackage());          
         }
-       
-        //public Task<int> RetrievePackageAsync()
-        //{
-        //    return Task.Factory.StartNew(() => RetrievePackage());
-        //}
 
+        public async Task<int> RetriveLocalPackageAsync(string dir)
+        {
+            return await Task.Factory.StartNew(() => RetrieveLocalPackage(dir));
+        }
+        public int RetrieveLocalPackage(string dir)
+        {
+            SetDirectory(dir);
+            GetDLLs();
+            return DLLs.Count;
+        }
         /// <summary>
         /// This will remove the directory where the package was downloaded
         /// </summary>
