@@ -258,5 +258,9 @@ namespace DownloadNuget
                 return AllFiles.ToArray();
             }
         }
+        public string GetDirectory()
+        {
+            return Dir;
+        }
     }
 }
