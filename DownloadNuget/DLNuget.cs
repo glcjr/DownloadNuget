@@ -122,6 +122,7 @@ namespace DownloadNuget
         }
         public int RetrieveLocalPackage(string dir)
         {
+            UniqueDir = false;
             SetDirectory(dir);
             GetDLLs();
             return DLLs.Count;
@@ -196,23 +197,42 @@ namespace DownloadNuget
         }
         private SemanticVersion GetLatestVersion(IPackageRepository repo, string packageID)
         {
-            List<IPackage> packages = repo.FindPackagesById(packageID).ToList();
-            packages = packages.Where(item => (item.IsReleaseVersion() == true)).ToList();
-            return packages[packages.Count - 1].Version;
+            return SemanticVersion.Parse(GetLatestVersion());
+            //List<IPackage> packages = repo.FindPackagesById(packageID).ToList();
+            //packages = packages.Where(item => (item.IsReleaseVersion() == true)).ToList();
+            //packages.Sort();
+            //return packages[packages.Count - 1].Version;
         }
-      
+        public List<string> GetAllVersions()
+        {
+            List<string> vers = new List<string>();
+            List<IPackage> packages = repo.FindPackagesById(PackageID).ToList();
+            packages = packages.Where(item => (item.IsReleaseVersion() == true)).ToList();
+            foreach (var p in packages)
+                vers.Add(p.Version.ToString());
+            vers.Sort();
+            return vers;
+        }
+        public string GetLatestVersion()
+        {
+            List<string> vers = GetAllVersions();
+            return vers[vers.Count - 1];
+        }
         private void GetDLLs()
         {
             SearchDirectory(Dir);        
         }
         private void SearchDirectory(string directory)
         {
-            string[] directories = Directory.GetDirectories(directory);
-            foreach (var d in directories)
+            if (Directory.Exists(directory))
             {
-                SearchFiles(d);
-                SearchDirectory(d);
-            }           
+                string[] directories = Directory.GetDirectories(directory);
+                foreach (var d in directories)
+                {
+                    SearchFiles(d);
+                    SearchDirectory(d);
+                }
+            }
         }
         private void SearchFiles(string directory)
         {

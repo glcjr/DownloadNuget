@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using DownloadNuget;
 
@@ -46,8 +47,11 @@ namespace ConsoleApp1
         static void Main(string[] args)
         {
             // sets the nuget package to be downloaded
-            DLNuget pkg = new DLNuget("Wix");
-
+            DLNuget pkg = new DLNuget("WixSharp");
+            Console.WriteLine("All Versions available: ");
+            List<string> vers = pkg.GetAllVersions();
+            foreach (var v in vers)
+                Console.WriteLine(v);
             //makes it use the temporary directory for malipulation
             pkg.UseTempDirectory();
             Console.WriteLine(pkg.Dir);
